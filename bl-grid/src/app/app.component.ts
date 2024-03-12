@@ -1,6 +1,6 @@
-import { Component,OnInit, ViewEncapsulation } from '@angular/core';
+import { Component,OnInit, ViewEncapsulation,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';  
-import { GridModule, PagerModule,PageService, FilterService, SortService, GroupService, GroupSettingsModel, ResizeService, AggregateService, EditService, GridComponent, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService } from '@syncfusion/ej2-angular-grids';
+import { GridModule, PagerModule,PageService, FilterService, FilterSettingsModel, SortService, GroupService, GroupSettingsModel, ResizeService, AggregateService, EditService, GridComponent, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService,ToolbarService,ToolbarItems, ReorderService,FreezeService } from '@syncfusion/ej2-angular-grids';
 
 import { RouterOutlet } from '@angular/router';
 import { Browser,L10n, setCulture } from '@syncfusion/ej2-base';
@@ -27,16 +27,31 @@ L10n.load({
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   encapsulation: ViewEncapsulation.None,
-  providers: [PageService],
+  providers: [PageService, 
+    SortService,
+    ResizeService,
+    ReorderService,
+    FilterService,
+    GroupService,
+    ToolbarService, 
+    PdfExportService,
+    ExcelExportService,
+    FreezeService
+  ]
 })
+
 export class AppComponent {
-  public grid!: GridComponent;
+  @ViewChild('grid')
+  public grid?: GridComponent;
   title = 'bl-grid';
   public rowMode!: string;
   public pageSettings: Object={ pageCount: 4, pageSizes: true };
-  public filterSettings!: Object;
+  //public filterSettings!: Object;
+  public filterOptions: Object = { type: 'Excel' };
+  public filterSettings?: FilterSettingsModel;
   public isDeskTop!: Boolean;
   public toolbar!: string[];
+  public toolbarOptions?: ToolbarItems[];
   public list:Product[]=[];
   public data :Product[]=[
     {
@@ -341,11 +356,19 @@ export class AppComponent {
     this.list=this.data;
     this.toolbar = ['Add', 'Edit', 'Delete', 'Update', 'Cancel', 'Search', 'ColumnChooser', 'ExcelExport', 'PdfExport'];
     this.pageSettings = { pageCount: 5, pageSizes: true };
+    //this.filterSettings = {
+      //type:'FilterBar'
+   //}
     //this.rowMode = 'Horizontal';
     //this.isDeskTop = !Browser.isDevice;
+    this.toolbarOptions = ['PdfExport'];
   }
 
- 
+  toolbarClick(args: ClickEventArgs): void {
+    if (args.item.id === 'Grid_pdfexport') { // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
+        (this.grid as GridComponent).pdfExport();
+    }
+}
 
   
 }

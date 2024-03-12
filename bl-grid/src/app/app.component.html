@@ -12,7 +12,17 @@
        
           <ejs-grid [dataSource]="list"
                     allowPaging="true"
+                    [allowSorting]='true'
+                    [allowResizing]="true"
+                    [allowReordering]="true"
+                    [allowFiltering]='true'
+                    [filterSettings]="filterOptions"
+                    [allowGrouping]='true'
                     [pageSettings]='pageSettings'
+                    [toolbar]='toolbar' [allowPdfExport]='true'
+                    [allowTextWrap]='true'
+                    [frozenColumns]='1' 
+                    gridLines='Both'
                     locale='en-US' >
             <e-columns>
               <e-column field='productId' headerText='Product ID' width='130' ></e-column>
